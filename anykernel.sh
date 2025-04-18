@@ -43,7 +43,7 @@ ui_print " ";
 
 # Check if we are using sideload with 'update.zip' or 'package.zip' and if sideload.txt exists
 if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" = "package.zip" ]; }; then
-  ui_print "Detected sideload, using manual configuration..."
+  ui_print "Sideload detected, using manual configuration..."
   ui_print " ";
 
   # Detect .fusionX file and analyze the filename
@@ -148,6 +148,15 @@ else
     ;;
   esac
 fi
+
+# Uclamp check
+if [ ! -f /vendor/etc/task_profiles.json ] && [ ! -f /system/vendor/etc/task_profiles.json ]; then
+  ui_print " ";
+  ui_print "Your rom does not have Uclamp task profiles !";
+  ui_print "Please install Uclamp task profiles module !";
+  ui_print "---> Ignore this if you already have.";
+  ui_print " ";
+fi;
 
 ## AnyKernel install
 dump_boot;
