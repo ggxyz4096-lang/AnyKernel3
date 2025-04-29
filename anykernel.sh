@@ -66,25 +66,43 @@ if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" =
     ui_print "CPU variant: $CPU_VARIANT"
     ui_print " ";
 
-    # Handle UI variant (AOSP or MIUI)
+    # Handle UI variant (AOSP, MIUI, or LOS)
     case "$UI_VARIANT" in
       miui)
-        ui_print "MIUI/HyperOS variant Identified"
-        ui_print "---> Applying MIUI/HOS DTBO..."
-        mv *-miui-dtbo.img $home/dtbo.img
-        rm -f *-aosp-dtbo.img
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│   MIUI/HyperOS ROM Detected     │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Optimizing kernel for MIUI/HOS...";
+        mv *-miui-dtbo.img $home/dtbo.img;
+        rm -f *-aosp-dtbo.img *-los-dtbo.img;
+        ;;
+      los)
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│     LineageOS IR Detected       │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Using Lineage Ir Blaster...";
+        mv *-los-dtbo.img $home/dtbo.img;
+        rm -f *-aosp-dtbo.img *-miui-dtbo.img;
         ;;
       aosp)
-        ui_print "AOSP variant Identified"
-        ui_print "---> Applying AOSP DTBO..."
-        mv *-aosp-dtbo.img $home/dtbo.img
-        rm -f *-miui-dtbo.img
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│       AOSP ROM Detected         │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Optimizing kernel for AOSP...";
+        mv *-aosp-dtbo.img $home/dtbo.img;
+        rm -f *-miui-dtbo.img *-los-dtbo.img;
         ;;
       *)
-        ui_print "No specific variant detected !!!"
-        ui_print "---> Applying AOSP DTBO..."
-        mv *-aosp-dtbo.img $home/dtbo.img
-        rm -f *-miui-dtbo.img
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│  No Specific Variant Detected!! │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Applying default AOSP configuration...";
+        mv *-aosp-dtbo.img $home/dtbo.img;
+        rm -f *-miui-dtbo.img *-los-dtbo.img;
         ;;
     esac
     ui_print " ";
@@ -92,16 +110,22 @@ if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" =
     # Handle CPU variant
     case "$CPU_VARIANT" in
       eff)
-        ui_print "Efficient CPU variant detected"
-        ui_print "---> Applying Efficient CPU variant..."
-        mv *-effcpu-dtb $home/dtb
-        rm -f *-normal-dtb
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│   Efficient CPU Mode Enabled    │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Applying efficient cpu optimizations...";
+        mv *-effcpu-dtb $home/dtb;
+        rm -f *-normal-dtb;
         ;;
       *)
-        ui_print "Normal CPU variant detected"
-        ui_print "---> Applying Normal CPU variant..."
-        mv *-normal-dtb $home/dtb
-        rm -f *-effcpu-dtb
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│    Normal CPU Mode Enabled      │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print " ";
+        ui_print "--→ Applying normal cpu settings...";
+        mv *-normal-dtb $home/dtb;
+        rm -f *-effcpu-dtb;
         ;;
     esac
 
@@ -113,39 +137,63 @@ if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" =
 else
   case "$ZIPFILE" in
     *miui*|*MIUI*)
-      ui_print "MIUI/HyperOS variant identified,";
-      ui_print "---> Applying MIUI DTBO... ";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│   MIUI/HyperOS ROM Detected     │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Optimizing kernel for MIUI/HOS...";
       mv *-miui-dtbo.img $home/dtbo.img;
-      rm *-aosp-dtbo.img;
-    ;;
+      rm -f *-aosp-dtbo.img *-los-dtbo.img;
+      ;;
+    *los*|*LOS*)
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│     LineageOS IR Detected      │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Using Lineage Ir Blaster...";
+      mv *-los-dtbo.img $home/dtbo.img;
+      rm -f *-aosp-dtbo.img *-miui-dtbo.img;
+      ;;
     *aosp*|*AOSP*)
-      ui_print "AOSP variant identified,";
-      ui_print "---> Applying AOSP DTBO... ";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│       AOSP ROM Detected         │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Optimizing kernel for AOSP...";
       mv *-aosp-dtbo.img $home/dtbo.img;
-      rm *-miui-dtbo.img;
-    ;;
+      rm -f *-miui-dtbo.img *-los-dtbo.img;
+      ;;
     *)
-      ui_print "No specific variant detected !!!";
-      ui_print "---> Applying AOSP DTBO... ";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│  No Specific Variant Detected!! │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Applying default AOSP configuration...";
       mv *-aosp-dtbo.img $home/dtbo.img;
-      rm *-miui-dtbo.img;
-    ;;
+      rm -f *-miui-dtbo.img *-los-dtbo.img;
+      ;;
   esac
   ui_print " ";
 
   case "$ZIPFILE" in
     *eff*|*EFF*)
-      ui_print "Efficient CPU variant identified,";
-      ui_print "---> Applying Efficient CPU variant...";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│   Efficient CPU Mode Enabled    │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Applying efficient cpu optimizations...";
       mv *-effcpu-dtb $home/dtb;
-      rm *-normal-dtb;
-    ;;
+      rm -f *-normal-dtb;
+      ;;
     *)
-      ui_print "Normal CPU variant identified,";
-      ui_print "---> Applying Normal CPU variant...";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│    Normal CPU Mode Enabled      │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print " ";
+      ui_print "--→ Applying normal cpu settings...";
       mv *-normal-dtb $home/dtb;
-      rm *-effcpu-dtb;
-    ;;
+      rm -f *-effcpu-dtb;
+      ;;
   esac
 fi
 
@@ -154,7 +202,7 @@ if [ ! -f /vendor/etc/task_profiles.json ] && [ ! -f /system/vendor/etc/task_pro
   ui_print " ";
   ui_print "Your rom does not have Uclamp task profiles !";
   ui_print "Please install Uclamp task profiles module !";
-  ui_print "---> Ignore this if you already have.";
+  ui_print "--→ Ignore this if you already have.";
   ui_print " ";
 fi;
 
