@@ -77,13 +77,13 @@ if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" =
         mv *-miui-dtbo.img $home/dtbo.img;
         rm -f *-aosp-dtbo.img *-los-dtbo.img;
         ;;
-      los)
+      ir)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│     LineageOS IR Detected       │";
+        ui_print "│        AOSP-IR detected         │";
         ui_print "└─────────────────────────────────┘";
         ui_print " ";
-        ui_print "--→ Using Lineage Ir Blaster...";
-        mv *-los-dtbo.img $home/dtbo.img;
+        ui_print "--→ Using New LOS-IR Implementation...";
+        mv *-aosp-ir-dtbo.img $home/dtbo.img;
         rm -f *-aosp-dtbo.img *-miui-dtbo.img;
         ;;
       aosp)
@@ -92,6 +92,7 @@ if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" =
         ui_print "└─────────────────────────────────┘";
         ui_print " ";
         ui_print "--→ Optimizing kernel for AOSP...";
+        ui_print "--→ Using OLD-IR Implementation...";
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-los-dtbo.img;
         ;;
@@ -145,13 +146,13 @@ else
       mv *-miui-dtbo.img $home/dtbo.img;
       rm -f *-aosp-dtbo.img *-los-dtbo.img;
       ;;
-    *los*|*LOS*)
+    *ir*|*IR*)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│     LineageOS IR Detected      │";
+      ui_print "│        AOSP-IR detected         │";
       ui_print "└─────────────────────────────────┘";
       ui_print " ";
-      ui_print "--→ Using Lineage Ir Blaster...";
-      mv *-los-dtbo.img $home/dtbo.img;
+      ui_print "--→ Using New LOS-IR Implementation...";
+      mv *-aosp-ir-dtbo.img $home/dtbo.img;
       rm -f *-aosp-dtbo.img *-miui-dtbo.img;
       ;;
     *aosp*|*AOSP*)
@@ -160,6 +161,7 @@ else
       ui_print "└─────────────────────────────────┘";
       ui_print " ";
       ui_print "--→ Optimizing kernel for AOSP...";
+      ui_print "--→ Using OLD-IR Implementation...";
       mv *-aosp-dtbo.img $home/dtbo.img;
       rm -f *-miui-dtbo.img *-los-dtbo.img;
       ;;
