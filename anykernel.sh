@@ -77,6 +77,7 @@ manual_install() {
         ui_print "│        AOSP  Selected           │";
         ui_print "└─────────────────────────────────┘";
         ui_print "--→ Optimizing kernel for AOSP/CLO/LOS based roms...";
+        ui_print "--→ Now choose IR blaster...";
         ui_print " ";
         ui_print "> IR Blaster: New LOS-IR (Vol +) || Old IR (Vol -) ";
         while true; do
@@ -110,7 +111,7 @@ manual_install() {
   done
   ui_print " ";
 
-  ui_print "> CPU Mode: Efficient (Vol +) || Normal/Default (Vol -)";
+  ui_print "> CPU Mode: Efficient (Vol +) || Normal (Vol -)";
   while true; do
     ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
     case $ev in
@@ -121,24 +122,46 @@ manual_install() {
         ui_print "--→ Applying efficient cpu optimizations...";
         if [ -f *-effcpu-dtb ]; then
           mv *-effcpu-dtb $home/dtb;
-          rm -f *-normal-dtb;
+          rm -f *-normal-dtb *-slight-uc-dtb;
         else
           abort "ERROR: Efficient CPU DTB not found!";
         fi
         break;
         ;;
       *KEY_VOLUMEDOWN*)
+        # Normal selected, now ask about frequency
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│    Normal CPU Mode Enabled      │";
+        ui_print "│    Normal CPU Mode Selected     │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying normal cpu settings...";
-        if [ -f *-normal-dtb ]; then
-          mv *-normal-dtb $home/dtb;
-          rm -f *-effcpu-dtb;
-        else
-          abort "ERROR: Normal CPU DTB not found!";
-        fi
-        break;
+        ui_print "--→ Now Choose your desired freq...";
+        ui_print " ";
+        ui_print "> CPU Frequency: 3.2GHz (Vol +) || 2.8GHz (Vol -) ";
+        while true; do
+          ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
+          case $ev in
+            *KEY_VOLUMEUP*)
+              ui_print "--→ 3.2GHz selected, Using Max frequencies...";
+              if [ -f *-normal-dtb ]; then
+                mv *-normal-dtb $home/dtb;
+                rm -f *-effcpu-dtb *-slight-uc-dtb;
+              else
+                abort "ERROR: Max CPU DTB not found!";
+              fi
+              break 
+              ;;
+            *KEY_VOLUMEDOWN*)
+              ui_print "--→ 2.8GHz selected, Using Balance frequencies...";
+              if [ -f *-slight-uc-dtb ]; then
+                mv *-slight-uc-dtb $home/dtb;
+                rm -f *-effcpu-dtb *-normal-dtb;
+              else
+                abort "ERROR: Underclocked CPU DTB not found!";
+              fi
+              break 
+              ;;
+          esac
+        done
+        break 
         ;;
     esac
   done
@@ -208,21 +231,33 @@ auto_install() {
       ui_print "--→ Applying efficient cpu optimizations...";
       if [ -f *-effcpu-dtb ]; then
         mv *-effcpu-dtb $home/dtb;
-        rm -f *-normal-dtb;
+        rm -f *-normal-dtb *-slight-uc-dtb;
       else
         abort "ERROR: Efficient CPU DTB not found!";
       fi
       ;;
+    *bal*|*BAL*)
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│   Balanced CPU Mode (2.8GHz)    │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print "--→ Applying 2.8GHz...";
+      if [ -f *-slight-uc-dtb ]; then
+        mv *-slight-uc-dtb $home/dtb;
+        rm -f *-effcpu-dtb *-normal-dtb;
+      else
+        abort "ERROR: Underclocked CPU DTB not found!";
+      fi
+      ;;
     *)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│    Normal CPU Mode Enabled      │";
+      ui_print "│   Normal CPU Mode (3.2GHz)      │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Applying normal cpu settings...";
+      ui_print "--→ Applying 3.2GHz...";
       if [ -f *-normal-dtb ]; then
         mv *-normal-dtb $home/dtb;
-        rm -f *-effcpu-dtb;
+        rm -f *-effcpu-dtb *-slight-uc-dtb;
       else
-        abort "ERROR: Normal CPU DTB not found!";
+        abort "ERROR: Max CPU DTB not found!";
       fi
       ;;
   esac
@@ -306,24 +341,36 @@ process_fusionx_file() {
         ui_print "┌─────────────────────────────────┐";
         ui_print "│   Efficient CPU Mode Enabled    │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying efficient cpu optimizations...";
+        ui_print "--→ Applying efficient cpu...";
         if [ -f *-effcpu-dtb ]; then
           mv *-effcpu-dtb $home/dtb;
-          rm -f *-normal-dtb;
+          rm -f *-normal-dtb *-slight-uc-dtb;
         else
           abort "ERROR: Efficient CPU DTB not found!";
         fi
         ;;
+      bal)
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│   Balanced CPU Mode (2.8GHz)    │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print "--→ Applying 2.8GHz...";
+        if [ -f *-slight-uc-dtb ]; then
+          mv *-slight-uc-dtb $home/dtb;
+          rm -f *-effcpu-dtb *-normal-dtb;
+        else
+          abort "ERROR: Underclocked CPU DTB not found!";
+        fi
+        ;;
       *)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│    Normal CPU Mode Enabled      │";
+        ui_print "│   Normal CPU Mode (3.2GHz)      │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying normal cpu settings...";
+        ui_print "--→ Applying 3.2GHz...";
         if [ -f *-normal-dtb ]; then
           mv *-normal-dtb $home/dtb;
-          rm -f *-effcpu-dtb;
+          rm -f *-effcpu-dtb *-slight-uc-dtb;
         else
-          abort "ERROR: Normal CPU DTB not found!";
+          abort "ERROR: Max CPU DTB not found!";
         fi
         ;;
     esac
