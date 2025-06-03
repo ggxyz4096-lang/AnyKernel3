@@ -4,7 +4,7 @@
 # FusionX kernel custom installer by SenX
 
 # Big thanks to these guys from whom i've taken ideas.
-# @KaminariKo and @sk113r
+# @KaminariKo (FakeDreamer Kernel) and @sk113r (E404 kernel)
 
 ## AnyKernel setup
 # begin properties
@@ -46,7 +46,7 @@ ui_print " ";
 # Check if we're in sideload mode
 if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" = "package.zip" ]; }; then
   SIDELOAD=1;
-  ui_print "Sideload mode detected...";
+  ui_print "Sideload installation detected";
   ui_print " ";
 else
   SIDELOAD=0;
@@ -60,10 +60,10 @@ manual_install() {
     case $ev in
       *KEY_VOLUMEUP*)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   MIUI/HyperOS ROM Selected     │";
+        ui_print "│      MIUI/HyperOS Selected      │";
         ui_print "└─────────────────────────────────┘";
         if [ -f *-miui-dtbo.img ]; then
-          ui_print "--→ Optimizing kernel for MIUI/HOS...";
+          ui_print "◉ Applying kernel for MIUI/HyperOS...";
           mv *-miui-dtbo.img $home/dtbo.img;
           rm -f *-aosp-dtbo.img *-aosp-ir-dtbo.img;
         else
@@ -74,17 +74,16 @@ manual_install() {
       *KEY_VOLUMEDOWN*)
         # AOSP selected, now ask about IR
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│        AOSP  Selected           │";
+        ui_print "│        AOSP Selected            │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Optimizing kernel for AOSP/CLO/LOS based roms...";
-        ui_print "--→ Now choose IR blaster...";
+        ui_print "◉ Applying kernel for AOSP-based ROMs...";
         ui_print " ";
         ui_print "> IR Blaster: New LOS-IR (Vol +) || Old IR (Vol -) ";
         while true; do
           ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
           case $ev in
             *KEY_VOLUMEUP*)
-              ui_print "--→ New IR selected, Using New LOS-IR Implementation...";
+              ui_print "◉ New LineageOS IR implementation selected";
               if [ -f *-aosp-ir-dtbo.img ]; then
                 mv *-aosp-ir-dtbo.img $home/dtbo.img;
                 rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -94,7 +93,7 @@ manual_install() {
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "--→ Old IR selected, Using OLD-IR Implementation...";
+              ui_print "◉ Old IR implementation selected";
               if [ -f *-aosp-dtbo.img ]; then
                 mv *-aosp-dtbo.img $home/dtbo.img;
                 rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -111,15 +110,15 @@ manual_install() {
   done
   ui_print " ";
 
-  ui_print "> CPU Mode: Efficient (Vol +) || Normal (Vol -)";
+  ui_print "> CPU Mode: Efficient (Vol +) || Normal (Vol -) ";
   while true; do
     ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
     case $ev in
       *KEY_VOLUMEUP*)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   Efficient CPU Mode Enabled    │";
+        ui_print "│     Efficient Mode Enabled      │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying efficient cpu optimizations...";
+        ui_print "◉ Applying power-efficient CPU configuration...";
         if [ -f *-effcpu-dtb ]; then
           mv *-effcpu-dtb $home/dtb;
           rm -f *-normal-dtb *-slight-uc-dtb;
@@ -131,16 +130,15 @@ manual_install() {
       *KEY_VOLUMEDOWN*)
         # Normal selected, now ask about frequency
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│    Normal CPU Mode Selected     │";
+        ui_print "│      Normal Mode Selected       │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Now Choose your desired freq...";
         ui_print " ";
         ui_print "> CPU Frequency: 3.2GHz (Vol +) || 2.8GHz (Vol -) ";
         while true; do
           ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
           case $ev in
             *KEY_VOLUMEUP*)
-              ui_print "--→ 3.2GHz selected, Using Max frequencies...";
+              ui_print "◉ Maximum performance selected - 3.2GHz";
               if [ -f *-normal-dtb ]; then
                 mv *-normal-dtb $home/dtb;
                 rm -f *-effcpu-dtb *-slight-uc-dtb;
@@ -150,7 +148,7 @@ manual_install() {
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "--→ 2.8GHz selected, Using Balance frequencies...";
+              ui_print "◉ Balanced performance selected - 2.8GHz";
               if [ -f *-slight-uc-dtb ]; then
                 mv *-slight-uc-dtb $home/dtb;
                 rm -f *-effcpu-dtb *-normal-dtb;
@@ -173,9 +171,9 @@ auto_install() {
   case "$ZIPFILE" in
     *miui*|*MIUI*)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│   MIUI/HyperOS ROM Detected     │";
+      ui_print "│    MIUI/HyperOS ROM Detected    │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Optimizing kernel for MIUI/HOS...";
+      ui_print "◉ Applying kernel for MIUI/HyperOS...";
       if [ -f *-miui-dtbo.img ]; then
         mv *-miui-dtbo.img $home/dtbo.img;
         rm -f *-aosp-dtbo.img *-aosp-ir-dtbo.img;
@@ -185,9 +183,9 @@ auto_install() {
       ;;
     *ir*|*IR*)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│        AOSP-IR detected         │";
+      ui_print "│     AOSP with New IR Detected   │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Using New LOS-IR Implementation...";
+      ui_print "◉ Applying New LineageOS IR implementation...";
       if [ -f *-aosp-ir-dtbo.img ]; then
         mv *-aosp-ir-dtbo.img $home/dtbo.img;
         rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -199,8 +197,8 @@ auto_install() {
       ui_print "┌─────────────────────────────────┐";
       ui_print "│       AOSP ROM Detected         │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Optimizing kernel for AOSP...";
-      ui_print "--→ Using OLD-IR Implementation...";
+      ui_print "◉ Applying kernel for AOSP...";
+      ui_print "◉ Using Old IR implementation...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -212,7 +210,7 @@ auto_install() {
       ui_print "┌─────────────────────────────────┐";
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Applying default AOSP configuration...";
+      ui_print "◉ Applying default AOSP configuration...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -226,9 +224,9 @@ auto_install() {
   case "$ZIPFILE" in
     *eff*|*EFF*)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│   Efficient CPU Mode Enabled    │";
+      ui_print "│     Efficient Mode Enabled      │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Applying efficient cpu optimizations...";
+      ui_print "◉ Applying power-efficient CPU frequency...";
       if [ -f *-effcpu-dtb ]; then
         mv *-effcpu-dtb $home/dtb;
         rm -f *-normal-dtb *-slight-uc-dtb;
@@ -238,9 +236,9 @@ auto_install() {
       ;;
     *bal*|*BAL*)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│   Balanced CPU Mode (2.8GHz)    │";
+      ui_print "│     Balance Mode - 2.8GHz       │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Applying 2.8GHz...";
+      ui_print "◉ Applying balance CPU frequency...";
       if [ -f *-slight-uc-dtb ]; then
         mv *-slight-uc-dtb $home/dtb;
         rm -f *-effcpu-dtb *-normal-dtb;
@@ -250,9 +248,9 @@ auto_install() {
       ;;
     *)
       ui_print "┌─────────────────────────────────┐";
-      ui_print "│   Normal CPU Mode (3.2GHz)      │";
+      ui_print "│   Performance Mode - 3.2GHz     │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "--→ Applying 3.2GHz...";
+      ui_print "◉ Applying maximum CPU frequency...";
       if [ -f *-normal-dtb ]; then
         mv *-normal-dtb $home/dtb;
         rm -f *-effcpu-dtb *-slight-uc-dtb;
@@ -277,17 +275,17 @@ process_fusionx_file() {
     UI_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f1)
     CPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f2)
     
-    ui_print "UI variant: $UI_VARIANT"
-    ui_print "CPU variant: $CPU_VARIANT"
+    ui_print "ROM configuration: $UI_VARIANT"
+    ui_print "CPU configuration: $CPU_VARIANT"
     ui_print " ";
 
     # Handle UI variant (AOSP, MIUI, or LOS)
     case "$UI_VARIANT" in
       miui)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   MIUI/HyperOS ROM Detected     │";
+        ui_print "│    MIUI/HyperOS ROM Detected    │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Optimizing kernel for MIUI/HOS...";
+        ui_print "◉ Applying kernel for MIUI/HyperOS...";
         if [ -f *-miui-dtbo.img ]; then
           mv *-miui-dtbo.img $home/dtbo.img;
           rm -f *-aosp-dtbo.img *-aosp-ir-dtbo.img;
@@ -297,9 +295,9 @@ process_fusionx_file() {
         ;;
       ir)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│      NEW LOS-IR detected        │";
+        ui_print "│    New LineageOS IR Detected    │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Using New LOS-IR Implementation...";
+        ui_print "◉ Applying New LineageOS IR implementation...";
         if [ -f *-aosp-ir-dtbo.img ]; then
           mv *-aosp-ir-dtbo.img $home/dtbo.img;
           rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -311,8 +309,8 @@ process_fusionx_file() {
         ui_print "┌─────────────────────────────────┐";
         ui_print "│       AOSP ROM Detected         │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Optimizing kernel for AOSP...";
-        ui_print "--→ Using OLD-IR Implementation...";
+        ui_print "◉ Applying kernel for AOSP...";
+        ui_print "◉ Using Old IR implementation...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -321,10 +319,10 @@ process_fusionx_file() {
         fi
         ;;
       *)
-        ui_print "┌─────────────────────────────────┐";
-        ui_print "│  No Specific Variant Detected!! │";
-        ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying default AOSP configuration...";
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│  No Specific Variant Detected!! │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print "◉ Applying default AOSP configuration...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -339,9 +337,9 @@ process_fusionx_file() {
     case "$CPU_VARIANT" in
       eff)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   Efficient CPU Mode Enabled    │";
+        ui_print "│     Efficient Mode Enabled      │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying efficient cpu...";
+        ui_print "◉ Applying power-efficient CPU frequency...";
         if [ -f *-effcpu-dtb ]; then
           mv *-effcpu-dtb $home/dtb;
           rm -f *-normal-dtb *-slight-uc-dtb;
@@ -351,21 +349,21 @@ process_fusionx_file() {
         ;;
       bal)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   Balanced CPU Mode (2.8GHz)    │";
+        ui_print "│     Balance Mode - 2.8GHz       │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying 2.8GHz...";
+        ui_print "◉ Applying balance CPU frequency...";
         if [ -f *-slight-uc-dtb ]; then
           mv *-slight-uc-dtb $home/dtb;
           rm -f *-effcpu-dtb *-normal-dtb;
         else
-          abort "ERROR: Underclocked CPU DTB not found!";
+          abort "ERROR: Slight UC CPU DTB not found!";
         fi
         ;;
       *)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│   Normal CPU Mode (3.2GHz)      │";
+        ui_print "│   Performance Mode - 3.2GHz     │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "--→ Applying 3.2GHz...";
+        ui_print "◉ Applying maximum CPU frequency...";
         if [ -f *-normal-dtb ]; then
           mv *-normal-dtb $home/dtb;
           rm -f *-effcpu-dtb *-slight-uc-dtb;
@@ -379,26 +377,25 @@ process_fusionx_file() {
     rm -f "$FUSIONX_FILE"
     return 0
   else
-    ui_print "No .fusionX file found for auto-configuration.";
+    ui_print "No configuration file found - proceeding with automatic detection";
     return 1
   fi
 }
 
 # Show selection for installation method
-ui_print " ! Select Installation Method:";
-ui_print " > Manual Install (Vol +) || Auto Install (Vol -) !";
+ui_print "> Installation Mode: Manual (Vol +) || Auto (Vol -) ";
 
 # Wait for user input without timeout
 while true; do
   ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
   case $ev in
     *KEY_VOLUMEUP*)
-      ui_print "  > Manual Install Selected.";
+      ui_print "◉ Manual installation selected";
       INSTALL_METHOD="manual"
       break
       ;;
     *KEY_VOLUMEDOWN*)
-      ui_print "  > Auto Install Selected.";
+      ui_print "◉ Automatic installation selected";
       INSTALL_METHOD="auto"
       break
       ;;
@@ -410,7 +407,7 @@ if [ "$INSTALL_METHOD" = "manual" ]; then
   manual_install
 elif [ "$INSTALL_METHOD" = "auto" ]; then
   if [ "$SIDELOAD" = "1" ] && process_fusionx_file; then
-    ui_print "Using configuration from .fusionX file for auto install.";
+    ui_print "Using configuration from setup file";
   else
     auto_install
   fi
@@ -418,9 +415,9 @@ fi
 
 if [ ! -f /vendor/etc/task_profiles.json ] && [ ! -f /system/vendor/etc/task_profiles.json ]; then
   ui_print " ";
-  ui_print "Your rom does not have Uclamp task profiles !";
-  ui_print "Please install Uclamp task profiles module !";
-  ui_print "--→ Ignore this if you already have.";
+  ui_print "Notice: Task profiles not found on your ROM";
+  ui_print "Consider installing Uclamp task profiles module for optimal performance";
+  ui_print "You can ignore this message if already installed";
   ui_print " ";
 fi;
 
