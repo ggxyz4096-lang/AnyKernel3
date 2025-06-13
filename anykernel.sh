@@ -83,7 +83,7 @@ manual_install() {
           ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
           case $ev in
             *KEY_VOLUMEUP*)
-              ui_print "◉ New LineageOS IR implementation selected";
+              ui_print "◉ New LineageOS-IR implementation selected";
               if [ -f *-aosp-ir-dtbo.img ]; then
                 mv *-aosp-ir-dtbo.img $home/dtbo.img;
                 rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -93,7 +93,7 @@ manual_install() {
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "◉ Old IR implementation selected";
+              ui_print "◉ Old-IR implementation selected";
               if [ -f *-aosp-dtbo.img ]; then
                 mv *-aosp-dtbo.img $home/dtbo.img;
                 rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -148,12 +148,12 @@ manual_install() {
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "◉ Balanced performance selected - 2.8GHz";
+              ui_print "◉ Balance performance selected - 2.8GHz";
               if [ -f *-slight-uc-dtb ]; then
                 mv *-slight-uc-dtb $home/dtb;
                 rm -f *-effcpu-dtb *-normal-dtb;
               else
-                abort "ERROR: Underclocked CPU DTB not found!";
+                abort "ERROR: Balance CPU DTB not found!";
               fi
               break 
               ;;
@@ -185,7 +185,7 @@ auto_install() {
       ui_print "┌─────────────────────────────────┐";
       ui_print "│     AOSP with New IR Detected   │";
       ui_print "└─────────────────────────────────┘";
-      ui_print "◉ Applying New LineageOS IR implementation...";
+      ui_print "◉ Applying New LineageOS-IR implementation...";
       if [ -f *-aosp-ir-dtbo.img ]; then
         mv *-aosp-ir-dtbo.img $home/dtbo.img;
         rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -198,7 +198,7 @@ auto_install() {
       ui_print "│       AOSP ROM Detected         │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying kernel for AOSP...";
-      ui_print "◉ Using Old IR implementation...";
+      ui_print "◉ Using Old-IR implementation...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -211,6 +211,7 @@ auto_install() {
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying default AOSP configuration...";
+      ui_print "◉ Using Old-IR implementation...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -243,7 +244,7 @@ auto_install() {
         mv *-slight-uc-dtb $home/dtb;
         rm -f *-effcpu-dtb *-normal-dtb;
       else
-        abort "ERROR: Underclocked CPU DTB not found!";
+        abort "ERROR: Balance CPU DTB not found!";
       fi
       ;;
     *)
@@ -275,8 +276,8 @@ process_fusionx_file() {
     UI_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f1)
     CPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f2)
     
-    ui_print "ROM configuration: $UI_VARIANT"
-    ui_print "CPU configuration: $CPU_VARIANT"
+    ui_print "ROM Variant: $UI_VARIANT"
+    ui_print "CPU Variant: $CPU_VARIANT"
     ui_print " ";
 
     # Handle UI variant (AOSP, MIUI, or LOS)
@@ -297,7 +298,7 @@ process_fusionx_file() {
         ui_print "┌─────────────────────────────────┐";
         ui_print "│    New LineageOS IR Detected    │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "◉ Applying New LineageOS IR implementation...";
+        ui_print "◉ Applying New LineageOS-IR implementation...";
         if [ -f *-aosp-ir-dtbo.img ]; then
           mv *-aosp-ir-dtbo.img $home/dtbo.img;
           rm -f *-aosp-dtbo.img *-miui-dtbo.img;
@@ -310,7 +311,7 @@ process_fusionx_file() {
         ui_print "│       AOSP ROM Detected         │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for AOSP...";
-        ui_print "◉ Using Old IR implementation...";
+        ui_print "◉ Using Old-IR implementation...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -323,6 +324,7 @@ process_fusionx_file() {
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying default AOSP configuration...";
+      ui_print "◉ Using Old-IR implementation...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -356,7 +358,7 @@ process_fusionx_file() {
           mv *-slight-uc-dtb $home/dtb;
           rm -f *-effcpu-dtb *-normal-dtb;
         else
-          abort "ERROR: Slight UC CPU DTB not found!";
+          abort "ERROR: Balance CPU DTB not found!";
         fi
         ;;
       *)
@@ -407,7 +409,7 @@ if [ "$INSTALL_METHOD" = "manual" ]; then
   manual_install
 elif [ "$INSTALL_METHOD" = "auto" ]; then
   if [ "$SIDELOAD" = "1" ] && process_fusionx_file; then
-    ui_print "Using configuration from setup file";
+    ui_print "Using configuration from fusionX file";
   else
     auto_install
   fi
