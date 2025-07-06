@@ -78,7 +78,7 @@ manual_install() {
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for AOSP-based ROMs...";
         ui_print " ";
-        ui_print "> IR Blaster: New LOS-IR (Vol +) || Old IR (Vol -) ";
+        ui_print "> IR Blaster: New LOS-IR (Vol +) || Legacy IR (Vol -) ";
         while true; do
           ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
           case $ev in
@@ -93,7 +93,7 @@ manual_install() {
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "◉ Old-IR implementation selected";
+              ui_print "◉ Legacy-IR implementation selected";
               if [ -f *-aosp-dtbo.img ]; then
                 mv *-aosp-dtbo.img $home/dtbo.img;
                 rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -198,7 +198,7 @@ auto_install() {
       ui_print "│       AOSP ROM Detected         │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying kernel for AOSP...";
-      ui_print "◉ Using Old-IR implementation...";
+      ui_print "◉ Using Legacy-IR implementation...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -211,7 +211,7 @@ auto_install() {
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying default AOSP configuration...";
-      ui_print "◉ Using Old-IR implementation...";
+      ui_print "◉ Using Legacy-IR implementation...";
       if [ -f *-aosp-dtbo.img ]; then
         mv *-aosp-dtbo.img $home/dtbo.img;
         rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -311,7 +311,7 @@ process_fusionx_file() {
         ui_print "│       AOSP ROM Detected         │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for AOSP...";
-        ui_print "◉ Using Old-IR implementation...";
+        ui_print "◉ Using Legacy-IR implementation...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
@@ -324,7 +324,7 @@ process_fusionx_file() {
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying default AOSP configuration...";
-      ui_print "◉ Using Old-IR implementation...";
+      ui_print "◉ Using Legacy-IR implementation...";
         if [ -f *-aosp-dtbo.img ]; then
           mv *-aosp-dtbo.img $home/dtbo.img;
           rm -f *-miui-dtbo.img *-aosp-ir-dtbo.img;
