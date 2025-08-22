@@ -109,7 +109,7 @@ manual_install() {
   done
   ui_print " ";
 
-  ui_print "> CPU Mode: Max (Vol +) || Balance (Vol -) ";
+  ui_print "> CPU Mode: Normal (Vol +) || Efficient (Vol -) ";
   while true; do
     ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
     case $ev in
