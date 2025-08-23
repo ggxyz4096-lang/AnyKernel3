@@ -61,13 +61,9 @@ manual_install() {
         ui_print "┌─────────────────────────────────┐";
         ui_print "│      MIUI/HyperOS Selected      │";
         ui_print "└─────────────────────────────────┘";
-        if [ -f *-miui-dtbo.img ]; then
-          ui_print "◉ Applying kernel for MIUI/HyperOS...";
-          mv *-miui-dtbo.img $home/dtbo.img;
-          rm -f *-aosp-dtbo.img;
-        else
-          abort "ERROR: MIUI dtbo image not found!";
-        fi
+        ui_print "◉ Applying kernel for MIUI/HyperOS...";
+        mv *-miui-dtbo.img $home/dtbo.img;
+        rm -f *-aosp-dtbo.img;
         break 
         ;;
       *KEY_VOLUMEDOWN*)
@@ -75,12 +71,8 @@ manual_install() {
         ui_print "│        AOSP Selected            │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for AOSP-based ROMs...";
-        if [ -f *-aosp-dtbo.img ]; then
-          mv *-aosp-dtbo.img $home/dtbo.img;
-          rm -f *-miui-dtbo.img;
-        else
-          abort "ERROR: AOSP dtbo image not found!";
-        fi
+        mv *-aosp-dtbo.img $home/dtbo.img;
+        rm -f *-miui-dtbo.img;
         break 
         ;;
     esac
@@ -125,38 +117,22 @@ manual_install() {
             *KEY_VOLUMEUP*)
               ui_print "◉ Maximum CPU selected - 3.2GHz";
               if [ "$GPU_PROFILE" = "uv" ]; then
-                if [ -f *-normal-dtb ]; then
-                  mv *-normal-dtb $home/dtb;
-                  rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-                else
-                  abort "ERROR: Normal (UV GPU) DTB not found!";
-                fi
+                mv *-normal-dtb $home/dtb;
+                rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
               else
-                if [ -f *-normal-gpustk-dtb ]; then
-                  mv *-normal-gpustk-dtb $home/dtb;
-                  rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-                else
-                  abort "ERROR: Normal (Stock GPU) DTB not found!";
-                fi
+                mv *-normal-gpustk-dtb $home/dtb;
+                rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
               fi
               break 
               ;;
             *KEY_VOLUMEDOWN*)
-              ui_print "◉ Balanc CPU selected - 2.8GHz";
+              ui_print "◉ Balance CPU selected - 2.8GHz";
               if [ "$GPU_PROFILE" = "uv" ]; then
-                if [ -f *-slightuc-dtb ]; then
-                  mv *-slightuc-dtb $home/dtb;
-                  rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-                else
-                  abort "ERROR: Balance (UV GPU) DTB not found!";
-                fi
+                mv *-slightuc-dtb $home/dtb;
+                rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
               else
-                if [ -f *-slightuc-gpustk-dtb ]; then
-                  mv *-slightuc-gpustk-dtb $home/dtb;
-                  rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
-                else
-                  abort "ERROR: Balance (Stock GPU) DTB not found!";
-                fi
+                mv *-slightuc-gpustk-dtb $home/dtb;
+                rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
               fi
               break 
               ;;
@@ -170,19 +146,11 @@ manual_install() {
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying power-efficient CPU configuration (2.5GHz)...";
         if [ "$GPU_PROFILE" = "uv" ]; then
-          if [ -f *-effcpu-dtb ]; then
-            mv *-effcpu-dtb $home/dtb;
-            rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-          else
-            abort "ERROR: Efficient CPU (UV GPU) DTB not found!";
-          fi
+          mv *-effcpu-dtb $home/dtb;
+          rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
         else
-          if [ -f *-effcpu-gpustk-dtb ]; then
-            mv *-effcpu-gpustk-dtb $home/dtb;
-            rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
-          else
-            abort "ERROR: Efficient CPU (Stock GPU) DTB not found!";
-          fi
+          mv *-effcpu-gpustk-dtb $home/dtb;
+          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
         fi
         break;
         ;;
@@ -198,43 +166,31 @@ auto_install() {
       ui_print "│    MIUI/HyperOS ROM Detected    │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying kernel for MIUI/HyperOS...";
-      if [ -f *-miui-dtbo.img ]; then
-        mv *-miui-dtbo.img $home/dtbo.img;
-        rm -f *-aosp-dtbo.img;
-      else
-        abort "ERROR: MIUI dtbo image not found!";
-      fi
+      mv *-miui-dtbo.img $home/dtbo.img;
+      rm -f *-aosp-dtbo.img;
       ;;
     *aosp*|*AOSP*)
       ui_print "┌─────────────────────────────────┐";
       ui_print "│       AOSP ROM Detected         │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying kernel for AOSP...";
-      if [ -f *-aosp-dtbo.img ]; then
-        mv *-aosp-dtbo.img $home/dtbo.img;
-        rm -f *-miui-dtbo.img;
-      else
-        abort "ERROR: AOSP dtbo image not found!";
-      fi
+      mv *-aosp-dtbo.img $home/dtbo.img;
+      rm -f *-miui-dtbo.img;
       ;;
     *)
       ui_print "┌─────────────────────────────────┐";
       ui_print "│  No Specific Variant Detected!! │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying default AOSP configuration...";
-      if [ -f *-aosp-dtbo.img ]; then
-        mv *-aosp-dtbo.img $home/dtbo.img;
-        rm -f *-miui-dtbo.img;
-      else
-        abort "ERROR: Default AOSP dtbo image not found!";
-      fi
+      mv *-aosp-dtbo.img $home/dtbo.img;
+      rm -f *-miui-dtbo.img;
       ;;
   esac
   ui_print " ";
 
   GPU_PROFILE="stock"
   case "$ZIPFILE" in
-    *uv*|*UV*|*undervolt*|*UNDERVOLT*)
+    *uv*|*UV*)
       GPU_PROFILE="uv"
       ui_print "◉ Undervolted GPU profile detected...";
       ;;
@@ -251,40 +207,24 @@ auto_install() {
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying power-efficient CPU frequency...";
       if [ "$GPU_PROFILE" = "stock" ]; then
-        if [ -f *-effcpu-gpustk-dtb ]; then
-          mv *-effcpu-gpustk-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
-        else
-          abort "ERROR: Efficient CPU (Stock GPU) DTB not found!";
-        fi
+        mv *-effcpu-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
       else
-        if [ -f *-effcpu-dtb ]; then
-          mv *-effcpu-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Efficient CPU (UV GPU) DTB not found!";
-        fi
+        mv *-effcpu-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       fi
       ;;
-    *bal*|*BAL*|*slight*|*SLIGHT*)
+    *bal*|*BAL*)
       ui_print "┌─────────────────────────────────┐";
       ui_print "│     Balance CPU - 2.8GHz        │";
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying balanced CPU frequency...";
       if [ "$GPU_PROFILE" = "stock" ]; then
-        if [ -f *-slightuc-gpustk-dtb ]; then
-          mv *-slightuc-gpustk-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Balance (Stock GPU) DTB not found!";
-        fi
+        mv *-slightuc-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
       else
-        if [ -f *-slightuc-dtb ]; then
-          mv *-slightuc-dtb $home/dtb;
-          rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Balance (UV GPU) DTB not found!";
-        fi
+        mv *-slightuc-dtb $home/dtb;
+        rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       fi
       ;;
     *)
@@ -293,19 +233,11 @@ auto_install() {
       ui_print "└─────────────────────────────────┘";
       ui_print "◉ Applying maximum CPU frequency...";
       if [ "$GPU_PROFILE" = "stock" ]; then
-        if [ -f *-normal-gpustk-dtb ]; then
-          mv *-normal-gpustk-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Normal (Stock GPU) DTB not found!";
-        fi
+        mv *-normal-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       else
-        if [ -f *-normal-dtb ]; then
-          mv *-normal-dtb $home/dtb;
-          rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Normal (UV GPU) DTB not found!";
-        fi
+        mv *-normal-dtb $home/dtb;
+        rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       fi
       ;;
   esac
@@ -321,13 +253,58 @@ process_fusionx_file() {
     FILE_NAME=$(basename "$FUSIONX_FILE")
     FILE_NAME_NO_EXT=$(echo "$FILE_NAME" | sed 's/\.fusionX$//')
     
-    UI_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f1)
-    GPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f2)
-    CPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f3)
+    UI_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f1)  
+    CPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f2)  
+    GPU_VARIANT=$(echo "$FILE_NAME_NO_EXT" | cut -d'-' -f3)
+    
+    if [ -z "$UI_VARIANT" ] || [ -z "$CPU_VARIANT" ] || [ -z "$GPU_VARIANT" ]; then
+      ui_print "┌─────────────────────────────────┐";
+      ui_print "│         FORMAT ERROR!           │";
+      ui_print "└─────────────────────────────────┘";
+      ui_print "Invalid .fusionX filename format!";
+      ui_print "Required format: [ui]-[cpu]-[gpu].fusionX";
+      abort "ERROR: Invalid .fusionX format! Use: [ui]-[cpu]-[gpu].fusionX";
+    fi
+    
+    case "$UI_VARIANT" in
+      miui|aosp) ;;
+      *)
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│       INVALID UI VARIANT!       │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print "UI variant '$UI_VARIANT' is not supported!";
+        ui_print "Supported UI variants: miui, aosp";
+        abort "ERROR: Invalid UI variant '$UI_VARIANT'! Use 'miui' or 'aosp'";
+        ;;
+    esac
+    
+    case "$CPU_VARIANT" in
+      max|bal|eff) ;;
+      *)
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│      INVALID CPU VARIANT!       │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print "CPU variant '$CPU_VARIANT' is not supported!";
+        ui_print "Supported CPU variants: max, bal, eff";
+        abort "ERROR: Invalid CPU variant '$CPU_VARIANT'! Use 'max', 'bal', or 'eff'";
+        ;;
+    esac
+    
+    case "$GPU_VARIANT" in
+      stock|uv) ;;
+      *)
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│      INVALID GPU VARIANT!       │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print "GPU variant '$GPU_VARIANT' is not supported!";
+        ui_print "Supported GPU variants: stock, uv";
+        abort "ERROR: Invalid GPU variant '$GPU_VARIANT'! Use 'stock' or 'uv'";
+        ;;
+    esac
     
     ui_print "ROM Variant: $UI_VARIANT"
-    ui_print "GPU Variant: $GPU_VARIANT"
     ui_print "CPU Variant: $CPU_VARIANT"
+    ui_print "GPU Variant: $GPU_VARIANT"
     ui_print " ";
 
     case "$UI_VARIANT" in
@@ -336,107 +313,74 @@ process_fusionx_file() {
         ui_print "│    MIUI/HyperOS ROM Detected    │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for MIUI/HyperOS...";
-        if [ -f *-miui-dtbo.img ]; then
-          mv *-miui-dtbo.img $home/dtbo.img;
-          rm -f *-aosp-dtbo.img;
-        else
-          abort "ERROR: MIUI dtbo image not found!";
-        fi
+        mv *-miui-dtbo.img $home/dtbo.img;
+        rm -f *-aosp-dtbo.img;
         ;;
       aosp)
         ui_print "┌─────────────────────────────────┐";
         ui_print "│       AOSP ROM Detected         │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying kernel for AOSP...";
-        if [ -f *-aosp-dtbo.img ]; then
-          mv *-aosp-dtbo.img $home/dtbo.img;
-          rm -f *-miui-dtbo.img;
-        else
-          abort "ERROR: AOSP dtbo image not found!";
-        fi
-        ;;
-      *)
-        ui_print "┌─────────────────────────────────┐";
-        ui_print "│  No Specific Variant Detected!! │";
-        ui_print "└─────────────────────────────────┘";
-        ui_print "◉ Applying default AOSP configuration...";
-        if [ -f *-aosp-dtbo.img ]; then
-          mv *-aosp-dtbo.img $home/dtbo.img;
-          rm -f *-miui-dtbo.img;
-        else
-          abort "ERROR: Default AOSP dtbo image not found!";
-        fi
+        mv *-aosp-dtbo.img $home/dtbo.img;
+        rm -f *-miui-dtbo.img;
         ;;
     esac
     ui_print " ";
 
-    case "$GPU_VARIANT-$CPU_VARIANT" in
-      uv-eff|eff-uv)
+    if [ "$CPU_VARIANT" = "eff" ]; then
+      if [ "$GPU_VARIANT" = "uv" ]; then
         ui_print "┌─────────────────────────────────┐";
         ui_print "│ Efficient CPU + UV GPU - 2.5GHz │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying efficient CPU + undervolted GPU...";
-        if [ -f *-effcpu-dtb ]; then
-          mv *-effcpu-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Efficient CPU (UV GPU) DTB not found!";
-        fi
-        ;;
-      eff)
+        mv *-effcpu-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
+      else
         ui_print "┌─────────────────────────────────┐";
         ui_print "│   Efficient CPU Mode - 2.5GHz   │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying efficient CPU + stock GPU...";
-        if [ -f *-effcpu-gpustk-dtb ]; then
-          mv *-effcpu-gpustk-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
-        else
-          abort "ERROR: Efficient CPU (Stock GPU) DTB not found!";
-        fi
-        ;;
-      uv-bal|bal-uv)
+        mv *-effcpu-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
+      fi
+    elif [ "$CPU_VARIANT" = "bal" ]; then
+      if [ "$GPU_VARIANT" = "uv" ]; then
         ui_print "┌─────────────────────────────────┐";
         ui_print "│  Balance CPU + UV GPU - 2.8GHz  │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying balanced CPU + undervolted GPU...";
-        if [ -f *-slightuc-dtb ]; then
-          mv *-slightuc-dtb $home/dtb;
-          rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Slight UC (UV GPU) DTB not found!";
-        fi
-        ;;
-      bal)
+        mv *-slightuc-dtb $home/dtb;
+        rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
+      else
         ui_print "┌─────────────────────────────────┐";
         ui_print "│    Balance CPU Mode - 2.8GHz    │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying balanced CPU + stock GPU...";
-        if [ -f *-slightuc-gpustk-dtb ]; then
-          mv *-slightuc-gpustk-dtb $home/dtb;
-          rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Slight UC (Stock GPU) DTB not found!";
-        fi
-        ;;
-      max-uv|uv-max)
+        mv *-slightuc-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
+      fi
+    elif [ "$CPU_VARIANT" = "max" ]; then
+      if [ "$GPU_VARIANT" = "uv" ]; then
         ui_print "┌─────────────────────────────────┐";
         ui_print "│      Max CPU Mode - 3.2GHz      │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying maximum CPU + undervolted GPU...";
-        if [ -f *-normal-dtb ]; then
-          mv *-normal-dtb $home/dtb;
-          rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
-        else
-          abort "ERROR: Normal (UV GPU) DTB not found!";
-        fi
-        ;;
-    esac
+        mv *-normal-dtb $home/dtb;
+        rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
+      else
+        ui_print "┌─────────────────────────────────┐";
+        ui_print "│        Max CPU - 3.2GHz         │";
+        ui_print "└─────────────────────────────────┘";
+        ui_print "◉ Applying maximum CPU + stock GPU...";
+        mv *-normal-gpustk-dtb $home/dtb;
+        rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
+      fi
+    fi
 
     rm -f "$FUSIONX_FILE"
     return 0
   else
-    ui_print "No configuration file found - proceeding with automatic detection";
+    ui_print "No configuration file found!!";
     return 1
   fi
 }
