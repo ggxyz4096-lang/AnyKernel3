@@ -79,15 +79,16 @@ manual_install() {
   done
   ui_print " ";
 
-  ui_print "> GPU Profile: Undervolted (Vol +) || Stock (Vol -) ";
+  ui_print "> GPU Profile: OC+UV (Vol +) || Stock (Vol -) ";
   while true; do
     ev=$(getevent -lt 2>/dev/null | grep -m1 "KEY_VOLUME.*DOWN")
     case $ev in
       *KEY_VOLUMEUP*)
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│     Undervolted GPU Enabled     │";
+        ui_print "│    OC+UV GPU Profile Enabled    │";
+        ui_print "│          (683-150MHz)           │";
         ui_print "└─────────────────────────────────┘";
-        GPU_PROFILE="uv"
+        GPU_PROFILE="ocuv"
         break;
         ;;
       *KEY_VOLUMEDOWN*)
@@ -116,7 +117,7 @@ manual_install() {
           case $ev in
             *KEY_VOLUMEUP*)
               ui_print "◉ Maximum CPU selected - 3.2GHz";
-              if [ "$GPU_PROFILE" = "uv" ]; then
+              if [ "$GPU_PROFILE" = "ocuv" ]; then
                 mv *-normal-dtb $home/dtb;
                 rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
               else
@@ -127,7 +128,7 @@ manual_install() {
               ;;
             *KEY_VOLUMEDOWN*)
               ui_print "◉ Balance CPU selected - 2.8GHz";
-              if [ "$GPU_PROFILE" = "uv" ]; then
+              if [ "$GPU_PROFILE" = "ocuv" ]; then
                 mv *-slightuc-dtb $home/dtb;
                 rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
               else
@@ -145,7 +146,7 @@ manual_install() {
         ui_print "│     Efficient Mode Enabled      │";
         ui_print "└─────────────────────────────────┘";
         ui_print "◉ Applying power-efficient CPU configuration (2.5GHz)...";
-        if [ "$GPU_PROFILE" = "uv" ]; then
+        if [ "$GPU_PROFILE" = "ocuv" ]; then
           mv *-effcpu-dtb $home/dtb;
           rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
         else
@@ -190,9 +191,9 @@ auto_install() {
 
   GPU_PROFILE="stock"
   case "$ZIPFILE" in
-    *uv*|*UV*)
-      GPU_PROFILE="uv"
-      ui_print "◉ Undervolted GPU profile detected...";
+    *ocuv*|*OCUV*|*uv*|*UV*)
+      GPU_PROFILE="ocuv"
+      ui_print "◉ OC+UV GPU profile detected (683-150MHz)...";
       ;;
     *)
       ui_print "◉ Using default stock GPU profile...";
@@ -291,16 +292,22 @@ process_fusionx_file() {
     esac
     
     case "$GPU_VARIANT" in
-      stock|uv) ;;
+      stock|ocuv|uv) ;;
       *)
         ui_print "┌─────────────────────────────────┐";
         ui_print "│      INVALID GPU VARIANT!       │";
         ui_print "└─────────────────────────────────┘";
         ui_print "GPU variant '$GPU_VARIANT' is not supported!";
-        ui_print "Supported GPU variants: stock, uv";
-        abort "ERROR: Invalid GPU variant '$GPU_VARIANT'! Use 'stock' or 'uv'";
+        ui_print "Supported GPU variants: stock, ocuv, uv";
+        abort "ERROR: Invalid GPU variant '$GPU_VARIANT'! Use 'stock', 'ocuv', or 'uv'";
         ;;
     esac
+    
+    # Convert 'uv' to 'ocuv' for backward compatibility
+    if [ "$GPU_VARIANT" = "uv" ]; then
+      GPU_VARIANT="ocuv"
+      ui_print "Note: 'uv' converted to 'ocuv' for compatibility";
+    fi
     
     ui_print "ROM Variant: $UI_VARIANT"
     ui_print "CPU Variant: $CPU_VARIANT"
@@ -328,11 +335,12 @@ process_fusionx_file() {
     ui_print " ";
 
     if [ "$CPU_VARIANT" = "eff" ]; then
-      if [ "$GPU_VARIANT" = "uv" ]; then
+      if [ "$GPU_VARIANT" = "ocuv" ]; then
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│ Efficient CPU + UV GPU - 2.5GHz │";
+        ui_print "│  Efficient CPU + OCUV - 2.5GHz  │";
+        ui_print "│        (683-150MHz GPU)         │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "◉ Applying efficient CPU + undervolted GPU...";
+        ui_print "◉ Applying efficient CPU + OC+UV GPU...";
         mv *-effcpu-dtb $home/dtb;
         rm -f *-normal-dtb *-slightuc-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       else
@@ -344,11 +352,12 @@ process_fusionx_file() {
         rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb;
       fi
     elif [ "$CPU_VARIANT" = "bal" ]; then
-      if [ "$GPU_VARIANT" = "uv" ]; then
+      if [ "$GPU_VARIANT" = "ocuv" ]; then
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│  Balance CPU + UV GPU - 2.8GHz  │";
+        ui_print "│   Balance CPU + OCUV - 2.8GHz   │";
+        ui_print "│         (683-150MHz GPU)        │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "◉ Applying balanced CPU + undervolted GPU...";
+        ui_print "◉ Applying balanced CPU + OC+UV GPU...";
         mv *-slightuc-dtb $home/dtb;
         rm -f *-normal-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       else
@@ -360,11 +369,12 @@ process_fusionx_file() {
         rm -f *-normal-dtb *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-effcpu-gpustk-dtb;
       fi
     elif [ "$CPU_VARIANT" = "max" ]; then
-      if [ "$GPU_VARIANT" = "uv" ]; then
+      if [ "$GPU_VARIANT" = "ocuv" ]; then
         ui_print "┌─────────────────────────────────┐";
-        ui_print "│      Max CPU Mode - 3.2GHz      │";
+        ui_print "│      Max CPU + OCUV - 3.2GHz    │";
+        ui_print "│          (683-150MHz GPU)       │";
         ui_print "└─────────────────────────────────┘";
-        ui_print "◉ Applying maximum CPU + undervolted GPU...";
+        ui_print "◉ Applying maximum CPU + OC+UV GPU...";
         mv *-normal-dtb $home/dtb;
         rm -f *-slightuc-dtb *-effcpu-dtb *-normal-gpustk-dtb *-slightuc-gpustk-dtb *-effcpu-gpustk-dtb;
       else
