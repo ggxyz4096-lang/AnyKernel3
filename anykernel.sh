@@ -9,7 +9,6 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=FusionX by SenX (@WazzupSensei911) --Telegram
 do.devicecheck=1
 do.modules=0
 do.systemless=1
@@ -36,12 +35,6 @@ ramdisk_compression=auto;
 # set permissions/ownership for included ramdisk files
 set_perm_recursive 0 0 750 750 $ramdisk/*;
 
-ui_print " ";
-ui_print "╔══════════════════════════════════════════╗";
-ui_print "║        F U S I O N X  K E R N E L        ║";
-ui_print "║           Powering your Device           ║";
-ui_print "╚══════════════════════════════════════════╝";
-ui_print " ";
 
 if { [ "$(basename "$ZIPFILE")" = "update.zip" ] || [ "$(basename "$ZIPFILE")" = "package.zip" ]; }; then
   SIDELOAD=1;
