@@ -39,14 +39,3 @@ fi;
 
 write_boot;
 ## end install
-
-## vendor_boot shell variables
-block=/dev/block/bootdevice/by-name/vendor_boot;
-is_slot_device=1;
-ramdisk_compression=auto;
-patch_vbmeta_flag=auto;
-
-reset_ak;
-dump_boot;
-write_boot;
-## end vendor_boot install
