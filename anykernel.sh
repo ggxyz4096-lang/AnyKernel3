@@ -22,7 +22,7 @@ ramdisk_compression=auto;
 # import patching functions/variables - see for reference
 . tools/ak3-core.sh;
 
-mv $home/kernels/Image $home/Image;
+mv $home/kernels/Image.gz $home/Image.gz;
 mv $home/kernels/dtb $home/dtb;
 mv $home/kernels/dtbo.img $home/dtbo.img;
 
