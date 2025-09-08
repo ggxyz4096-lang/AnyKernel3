@@ -23,6 +23,7 @@ ramdisk_compression=auto;
 . tools/ak3-core.sh;
 
 mv $home/kernels/Image $home/Image;
+mv $home/kernels/dtb $home/dtb;
 mv $home/kernels/dtbo.img $home/dtbo.img;
 
 ## AnyKernel file attributes
